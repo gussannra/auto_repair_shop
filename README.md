@@ -16,6 +16,8 @@ Yrgo. Backend programming Part 2. Assignment 2. Spring Data JPA.
 
 ## Test the system 
 
+Test for example with Bruno, Insomnia, Postman, curl.
+
 ### Create customer
 POST
 http://localhost:8080/customers?name=Bosse&phone=0701020304

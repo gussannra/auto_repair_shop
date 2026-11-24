@@ -1,6 +1,9 @@
 package se.yrgo.auto_repair_shop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.Objects;
 
 @Entity
 public class Vehicle {
@@ -12,8 +15,9 @@ public class Vehicle {
     private String model;
     private int productionYear;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerId")
+    @JsonIgnore
     private Customer customer;
 
     public Vehicle() {
@@ -47,6 +51,10 @@ public class Vehicle {
         return productionYear;
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -65,5 +73,20 @@ public class Vehicle {
 
     public void setProductionYear(int productionYear) {
         this.productionYear = productionYear;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Vehicle vehicle)) return false;
+        return productionYear == vehicle.productionYear && Objects.equals(id, vehicle.id) && Objects.equals(registrationNumber, vehicle.registrationNumber) && Objects.equals(brand, vehicle.brand) && Objects.equals(model, vehicle.model) && Objects.equals(customer, vehicle.customer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, registrationNumber, brand, model, productionYear, customer);
     }
 }

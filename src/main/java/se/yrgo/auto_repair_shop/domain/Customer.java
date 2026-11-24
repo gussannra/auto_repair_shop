@@ -12,8 +12,10 @@ public class Customer {
     private String name;
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "customer")
-    private Set<Vehicle> vehicleList = new HashSet<>();
+    @OneToMany(mappedBy = "customer",
+                fetch = FetchType.LAZY,
+                cascade = CascadeType.ALL)
+    private List<Vehicle> vehicleList = new ArrayList<>();
 
     public Customer() {
     }
@@ -26,11 +28,7 @@ public class Customer {
 
     public void addVehicle(Vehicle vehicle) {
         this.vehicleList.add(vehicle);
-    }
-
-    public Set<Vehicle> getVehicleList() {
-        Set<Vehicle> unmodifiable = Collections.unmodifiableSet(this.vehicleList);
-        return unmodifiable;
+        vehicle.setCustomer(this);
     }
 
     public Long getId() {
@@ -41,8 +39,12 @@ public class Customer {
         return name;
     }
 
-    public String getPhone() {
+    public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public List<Vehicle> getVehicleList() {
+        return vehicleList;
     }
 
     public void setId(Long id) {
@@ -53,7 +55,22 @@ public class Customer {
         this.name = name;
     }
 
-    public void setPhone(String phone) {
-        this.phoneNumber = phone;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setVehicleList(List<Vehicle> vehicleList) {
+        this.vehicleList = vehicleList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Customer customer)) return false;
+        return Objects.equals(id, customer.id) && Objects.equals(name, customer.name) && Objects.equals(phoneNumber, customer.phoneNumber) && Objects.equals(vehicleList, customer.vehicleList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, phoneNumber, vehicleList);
     }
 }

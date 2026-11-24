@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import se.yrgo.auto_repair_shop.domain.Vehicle;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
+
     // Hämnta alla fordon som tillhör ett visst bilmärke
     List<Vehicle> findByBrand(String brand);
 
@@ -25,5 +25,9 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
     )
     @Transactional
     @Query("UPDATE Vehicle v SET v.brand = :brand WHERE v.id = :id")
-    Optional<Vehicle> updateBrandById(@Param("brand") String brand, @Param("id") Long id);
+    int updateBrandById(@Param("id") Long id, @Param("brand") String brand);
+
+    // Lista bilmärke och registreringsnummer
+    @Query("SELECT v.brand AS brand, v.registrationNumber AS registrationNumber FROM Vehicle v")
+    List<VehicleBrandProjection> findAllVehiclesBrandAndRegNumber();
 }

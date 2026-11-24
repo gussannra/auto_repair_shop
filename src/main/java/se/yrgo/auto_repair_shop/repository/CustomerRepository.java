@@ -11,8 +11,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     // Hämta en kund baserat på namn
     Optional<Customer> findByName(String name);
 
-    // Hämta alla kunder tillsammans med derad fordon.
-    // Använd JOIN och hantera även kunder som inte har några fordon
-    @Query("SELECT c, v FROM Customer c LEFT JOIN Vehicle v")
+    // Hämta alla kunder tillsammans med deras fordon
+    @Query("SELECT c, v FROM Customer c LEFT JOIN Vehicle v ON v.customer = c")
     List<Object[]> findAllCustomerWithAllVehicles();
 }
